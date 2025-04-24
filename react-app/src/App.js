@@ -6,6 +6,7 @@ import AddressForm from './components/AddressForm';
 import './App.css';
 import AppTheme from './theme/AppTheme'
 import ResponsiveAppBar from './components/ResponsiveAppBar'
+import FormCadastro from './FormCadastro';
 
 function App() {
 
@@ -25,7 +26,8 @@ function App() {
             maxWidth: { sm: '100%', md: 1000 },
             mt: 3,
           }}
-        >          
+        >
+		  <FormCadastro/>  
           <AddressForm />
           <Box
             sx={[
