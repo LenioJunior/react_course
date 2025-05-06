@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,6 +14,9 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import PeopleIcon from '@mui/icons-material/People';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { ColorModeContext } from '../theme/AppTheme';
 
 const pages = [
   { title: 'Users', path: '/users' },
@@ -22,6 +26,8 @@ const pages = [
 const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
+  const theme = useTheme();
+  const colorMode = React.useContext(ColorModeContext);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -138,7 +144,12 @@ function ResponsiveAppBar() {
             ))}
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}>
+            <Tooltip title={theme.palette.mode === 'dark' ? 'Light mode' : 'Dark mode'}>
+              <IconButton onClick={colorMode.toggleColorMode} color="inherit" sx={{ mr: 2 }}>
+                {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="User" />

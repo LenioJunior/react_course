@@ -12,8 +12,8 @@ export const AppRoutes = () => {
     <Routes>
       <Route path={rootPath} element={<Navigate to={usersPath} />} />
       <Route path={usersPath} element={<UserList />} />
-      <Route path={usersPath + '/add'} element={<UserForm />} />
-      <Route path={usersPath + '/edit/:id'} element={<UserForm />} />
+      <Route path={`${usersPath}/add`} element={<UserForm />} />
+      <Route path={`${usersPath}/edit/:id`} element={<UserForm />} />
       <Route path="*" element={<div>Page Not Found</div>} />
     </Routes>
   );
