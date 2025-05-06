@@ -1,6 +1,7 @@
 import api from './AxiosApi';
 
 export default class BaseService {
+
   constructor(entityName) {
     this.entityName = entityName;
   }
