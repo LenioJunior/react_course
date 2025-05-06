@@ -26,5 +26,5 @@ with app.app_context():
     # Entities must be imported to allow migrations to detect changes
 
     from user import User
-    #db.reflect()
+    # db.reflect()
     db.create_all()

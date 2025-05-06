@@ -1,21 +1,13 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { DataGrid, GridActionsCellItem, GridRowEditStopReasons, GridToolbarContainer } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarContainer } from '@mui/x-data-grid';
 import { GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarExport, GridToolbarDensitySelector } from '@mui/x-data-grid';
-import { Box, Stack } from '@mui/material';
-import { Button, Typography } from '@mui/material/';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import { Box, Button } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 
 export default function CustomizedDataGrid(props) {
+  const columns = props.columns || [];
+  const rows = props.rows || [];
 
   function CustomToolbar() {
     return (
@@ -38,6 +30,12 @@ export default function CustomizedDataGrid(props) {
     );
   }
 
+  const onAddClick = () => {
+    if (props.onAddClick) {
+      props.onAddClick();
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -51,20 +49,19 @@ export default function CustomizedDataGrid(props) {
         }
       }}
     >
-      {!props.hideAddAction && (
-        <Button variant='outlined' onClick={onAddClick} startIcon={<AddCircleIcon />}>
+      {!props.hideAddAction && props.onAddClick && (
+        <Button variant='outlined' onClick={onAddClick} startIcon={<AddCircleIcon />} sx={{ mb: 2 }}>
           Register
         </Button>
       )}
       <DataGrid
-        rows={props.rows}
+        rows={rows}
         columns={columns}
         initialState={{
           pagination: { paginationModel: { pageSize: 20 } }
         }}
         pageSizeOptions={[10, 20, 50]}
         disableColumnResize
-        onRowEditStop={handleRowEditStop}
         slots={{
           toolbar: CustomToolbar
         }}
@@ -95,23 +92,13 @@ export default function CustomizedDataGrid(props) {
           }
         }}
       />
-      <Dialog open={open} onClose={() => setOpen(false)} aria-labelledby='alert-dialog-title' aria-describedby='alert-dialog-description'>
-        <DialogTitle id='alert-dialog-title'>
-          <Stack direction='row' spacing={1}>
-            <WarningRoundedIcon />
-            <Typography variant='h5'>Confirmation</Typography>
-          </Stack>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id='alert-dialog-description'>Are you sure you want to delete the register?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>Cancel</Button>
-          <Button variant='outlined' color='error' onClick={onConfirmDeleteClick} autoFocus>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }
+
+CustomizedDataGrid.propTypes = {
+  rows: PropTypes.array.isRequired,
+  columns: PropTypes.array.isRequired,
+  onAddClick: PropTypes.func,
+  hideAddAction: PropTypes.bool
+};

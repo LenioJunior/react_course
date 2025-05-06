@@ -1,7 +1,6 @@
 from app_entities import db
 from flask import request, jsonify
-from werkzeug.security import generate_password_hash
-from user import User, UserSchema, users_schema, user_schema
+from user import User, UserSchema, user_schema, users_schema
 
 
 class UserController:
@@ -9,7 +8,7 @@ class UserController:
     def get(self, id):
 
         if not id:
-            return jsonify({'message': f'The id must be provided!'}), 404
+            return jsonify({'message': 'The id must be provided!'}), 404
 
         entity = User.query.get(id)
 
@@ -17,7 +16,9 @@ class UserController:
             result = user_schema.dump(entity)
             return jsonify(result), 200
         else:
-            return jsonify({'message': f'The user with id "{id}" don´t exist!'}), 404
+            return jsonify({
+                'message': f'The user with id "{id}" don´t exist!'
+            }), 404
 
     def get_all(self):
         try:
@@ -28,7 +29,7 @@ class UserController:
 
             return jsonify({'message': 'No users were found!'}), 204
         except Exception as e:
-            return jsonify({f'Error while getting all entities': {e}}), 400
+            return jsonify({'Error while getting all entities': str(e)}), 400
 
     def post(self):
         name = request.json['name']
@@ -46,14 +47,16 @@ class UserController:
             return jsonify(result), 201
 
         except Exception as e:
-            return jsonify({'message': 'Unable to create the user!', 'data': str(e)}), 500
-
+            return jsonify({
+                'message': 'Unable to create the user!',
+                'data': str(e)
+            }), 500
 
     def update(self, id):
         db_user = User.query.get(id)
 
         if not db_user:
-            return jsonify({'message': f'User not found!', 'data': {}}), 404
+            return jsonify({'message': 'User not found!', 'data': {}}), 404
 
         db_user.password = request.json['password']
         db_user.name = request.json['name']
@@ -66,13 +69,19 @@ class UserController:
             result = user_schema.dump(db_user)
             return jsonify(result), 204
         except Exception as e:
-            return jsonify({'message': 'Unable to update the user!', 'data': str(e)}), 500
+            return jsonify({
+                'message': 'Unable to update the user!',
+                'data': str(e)
+            }), 500
 
     def delete(self, id):
         entity = User.query.get(id)
 
         if not entity:
-            return jsonify({'message': f'Entity with id "{id}" don´t exist!', 'data': {}}), 404
+            return jsonify({
+                'message': f'Entity with id "{id}" don´t exist!',
+                'data': {}
+            }), 404
 
         try:
             db.session.delete(entity)
@@ -80,7 +89,10 @@ class UserController:
             result = user_schema.dump(entity)
             return jsonify(result), 200
         except Exception as e:
-            return jsonify({'message': 'Unable to delete!', 'data': str(e)}), 500
+            return jsonify({'message':
+                            'Unable to delete!',
+                            'data': str(e)
+                            }), 500
 
     def user_by_email(self, email):
         filtered = User.query.filter_by(email=email)

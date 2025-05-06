@@ -1,0 +1,5 @@
+infrastructure/**
+.env
+INSTRUCTIONS.md
+INSTRUCOES.md
+docker-compose.yml  

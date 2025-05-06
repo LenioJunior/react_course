@@ -18,7 +18,6 @@ class User(db.Model):
     email = mapped_column(String(70), unique=True, nullable=False)
     password = mapped_column(String(200), nullable=False)
 
-
     def __init__(self, password, name, username, phone, email):
         self.password = password
         self.name = name
@@ -42,6 +41,7 @@ class UserSchema(ma.Schema):
     phone = fields.String()
     email = fields.String()
     password = fields.String()
+
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
